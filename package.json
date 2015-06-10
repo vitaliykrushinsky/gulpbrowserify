@@ -1,0 +1,13 @@
+{
+  "name": "gulpbrowserify",
+  "version": "0.0.1",
+  "description": "Web Project Workflows with Gulp.js, Git, and Browserify",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "?.git"
+  },
+  "author": "Vitaliy Krushinsky"
+}
