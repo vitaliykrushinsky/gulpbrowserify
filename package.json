@@ -9,5 +9,9 @@
     "type": "git",
     "url": "?.git"
   },
-  "author": "Vitaliy Krushinsky"
+  "author": "Vitaliy Krushinsky",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-util": "^3.0.5"
+  }
 }
