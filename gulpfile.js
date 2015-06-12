@@ -6,6 +6,8 @@ var gulp = require('gulp'),
 	compass = require('gulp-compass'), //variant 2
 	concat  = require('gulp-concat');
 
+
+var coffeeSources = ['components/coffe/*.coffee'];
 var jsSources = [
 	'components/scripts/rclick.js',
 	'components/scripts/pixgrid.js',
@@ -15,13 +17,13 @@ var jsSources = [
 var sassSources = ['components/sass/style.scss'];
 
 gulp.task('coffee', function() {
-	gulp.src('components/coffe/*.coffee')
+	gulp.src(coffeeSources)
 		.pipe(coffee({bare: true}).on('error', gutil.log ))
 		.pipe(gulp.dest('components/scripts'))
 
 });
 
-gulp.task('js', ['coffee'], function() {
+gulp.task('js', function() {
 	gulp.src(jsSources)
 		.pipe(concat('scripts.js'))
 		.pipe(browserify())
@@ -49,6 +51,12 @@ gulp.task('sass', function() {
      style: 'expanded'
    }).on('error', gutil.log)
    .pipe(gulp.dest('builds/development/css'))
+});
+
+gulp.task('watch', function() {
+	gulp.watch(coffeeSources, ['coffee']);
+	gulp.watch(jsSources, ['js']);
+	gulp.watch('components/sass/*.scss', ['sass']);
 });
 
 gulp.task('default', ['coffee', 'js', 'sass']);
