@@ -25,7 +25,7 @@ gulp.task('coffee', function() {
 
 gulp.task('js', function() {
 	gulp.src(jsSources)
-		.pipe(concat('scripts.js'))
+		.pipe(concat('script.js'))
 		.pipe(browserify())
 		.pipe(gulp.dest('builds/development/js'))
 });
@@ -59,4 +59,4 @@ gulp.task('watch', function() {
 	gulp.watch('components/sass/*.scss', ['sass']);
 });
 
-gulp.task('default', ['coffee', 'js', 'sass']);
+gulp.task('default', ['coffee', 'js', 'sass', 'watch']);
