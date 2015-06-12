@@ -4,6 +4,7 @@ var gulp = require('gulp'),
 	browserify = require('gulp-browserify'),
 	sass = require('gulp-ruby-sass'), //variant 1 author
 	compass = require('gulp-compass'), //variant 2
+	connect = require('gulp-connect'),
 	concat  = require('gulp-concat');
 
 
@@ -28,6 +29,7 @@ gulp.task('js', function() {
 		.pipe(concat('script.js'))
 		.pipe(browserify())
 		.pipe(gulp.dest('builds/development/js'))
+		.pipe(connect.reload())
 });
 
 //variant 1
@@ -41,6 +43,7 @@ gulp.task('js', function() {
 // 		})
 // 		.on('error', gutil.log ))
 // 		.pipe(gulp.dest('builds/development/css'))
+//		.pipe(connect.reload())
 // });
 
 //variant 2
@@ -51,6 +54,7 @@ gulp.task('sass', function() {
      style: 'expanded'
    }).on('error', gutil.log)
    .pipe(gulp.dest('builds/development/css'))
+   .pipe(connect.reload())
 });
 
 gulp.task('watch', function() {
@@ -59,4 +63,11 @@ gulp.task('watch', function() {
 	gulp.watch('components/sass/*.scss', ['sass']);
 });
 
-gulp.task('default', ['coffee', 'js', 'sass', 'watch']);
+gulp.task('connect', function() {
+	connect.server({
+		root: 'builds/development/',
+		livereload: true
+	});
+});
+
+gulp.task('default', ['coffee', 'js', 'sass', 'connect', 'watch']);
