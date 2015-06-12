@@ -21,7 +21,7 @@ gulp.task('coffee', function() {
 
 });
 
-gulp.task('js', function() {
+gulp.task('js', ['coffee'], function() {
 	gulp.src(jsSources)
 		.pipe(concat('scripts.js'))
 		.pipe(browserify())
@@ -50,3 +50,5 @@ gulp.task('sass', function() {
    }).on('error', gutil.log)
    .pipe(gulp.dest('builds/development/css'))
 });
+
+gulp.task('default', ['coffee', 'js', 'sass']);
