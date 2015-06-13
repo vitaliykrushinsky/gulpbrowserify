@@ -9,6 +9,8 @@ var gulp = require('gulp'),
 	uglify = require('gulp-uglify'),
 	minifyHtml = require('gulp-minify-html'),
 	jsonminify = require('gulp-jsonminify'),
+	imagemin = require('gulp-imagemin'),
+	pngquant = require('imagemin-pngquant'),
 	concat  = require('gulp-concat');
 
 var env,
@@ -20,7 +22,7 @@ var env,
 	outputDir,
 	sassStyle;
 
-env = process.env.NODE_ENV || 'production'; // if NODE_ENV doesn't work in terminal command on PC, force change to 'production', before run 'gulp' command
+env = process.env.NODE_ENV || 'development'; // if NODE_ENV doesn't work in terminal command on PC, force change to 'production', before run 'gulp' command
 
 if (env === 'development') {
 	outputDir = 'builds/development/';
@@ -88,6 +90,7 @@ gulp.task('watch', function() {
 	gulp.watch('components/sass/*.scss', ['sass']);
 	gulp.watch('builds/development/*.html', ['html']);
 	gulp.watch('builds/development/js/*.json', ['json']);
+	gulp.watch('builds/development/images/**/*.*', ['images']);
 
 });
 
@@ -105,6 +108,17 @@ gulp.task('html', function() {
 	.pipe(connect.reload())
 });
 
+gulp.task('images', function() {
+	gulp.src('builds/development/images/**/*.*')
+	.pipe(gulpif(env === 'production', imagemin({
+		progressive: true,
+        svgoPlugins: [{removeViewBox: false}],
+        use: [pngquant({quality: '65-80', speed: 4})]
+	})))
+	.pipe(gulpif(env === 'production', gulp.dest(outputDir + 'images')))
+	.pipe(connect.reload())
+});
+
 gulp.task('json', function() {
 	gulp.src('builds/development/js/*.json')
 	.pipe(gulpif(env === 'production', jsonminify()))
@@ -112,4 +126,4 @@ gulp.task('json', function() {
 	.pipe(connect.reload())
 });
 
-gulp.task('default', ['html', 'json', 'coffee', 'js', 'sass', 'connect', 'watch']);
+gulp.task('default', ['html', 'json', 'coffee', 'js', 'sass', 'images', 'connect', 'watch']);
