@@ -5,6 +5,8 @@ var gulp = require('gulp'),
 	sass = require('gulp-ruby-sass'), //variant 1 author
 	compass = require('gulp-compass'), //variant 2
 	connect = require('gulp-connect'),
+	gulpif = require('gulp-if'),
+	uglify = require('gulp-uglify'),
 	concat  = require('gulp-concat');
 
 var env,
@@ -16,7 +18,7 @@ var env,
 	outputDir,
 	sassStyle;
 
-env = process.env.NODE_ENV || 'development'; // if NODE_ENV doesn't work in terminal command on PC, force change to 'production', before run 'gulp' command
+env = process.env.NODE_ENV || 'production'; // if NODE_ENV doesn't work in terminal command on PC, force change to 'production', before run 'gulp' command
 
 if (env === 'development') {
 	outputDir = 'builds/development/';
@@ -48,6 +50,7 @@ gulp.task('js', function() {
 	gulp.src(jsSources)
 		.pipe(concat('script.js'))
 		.pipe(browserify())
+		.pipe(gulpif(env === 'production', uglify()))
 		.pipe(gulp.dest(outputDir + 'js'))
 		.pipe(connect.reload())
 });
